@@ -4,18 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class Statistiques
-{
-    public float Vie { get; set; }
-    public float Attaque { get; set; }
-    public float Defense { get; set; }
-    public float Vitesse { get; set; }
-}
-
-
 public class Pokelol
 {
     public string Name { get; set; }
+    public bool IsAlive { get; set; }
     public int Level { get; set; }
     public float Experience_Acquis { get; set; }
     public float Experience_Necessaire { get; set; }
@@ -25,6 +17,8 @@ public class Pokelol
     public Pokelol(string name)
     {
         Name = name;
+
+        IsAlive = true;
 
         Level = 0;
         Experience_Acquis = 0;
@@ -76,84 +70,6 @@ public class Pokelol
             Description = description;
             Stats_capacite = stats_capacite;
             Type_capacite = type_capacite;
-        }
-    }
-}
-
-
-
-public class Player
-{
-    public string Name { get; set; }
-
-    public int Level { get; set; }
-    public float Experience_Acquis { get; set; }
-    public float Experience_Necessaire { get; set; }
-
-    public Inventory Inventory { get; set; }
-    public Team Team { get; set; }
-
-
-    public Player(string name)
-    {
-        Name = name;
-
-        Level = 1;
-        Experience_Acquis = 0;
-        Experience_Necessaire = 100;
-
-        Inventory = new Inventory();
-        Team = new Team();
-    }
-
-
-}
-
-public class Inventory
-{
-    public List<Item> Items { get; set; } = new List<Item>();
-
-    public void AddItem(Item item)
-    {
-        Items.Add(item);
-    }
-
-    public void RemoveItem(Item item)
-    {
-        Items.Remove(item);
-    }
-
-    public void ShowInventory()
-    {
-        Console.WriteLine("Inventory Contents:");
-        foreach (var item in Items)
-        {
-            Console.WriteLine($"Name: {item.Name}");
-        }
-    }
-
-}
-    
-public class Item
-{
-    public string Name { get; set; }
-}
-
-public class Team
-{
-    public List<Pokelol> Members { get; set; } = new List<Pokelol>();
-
-    public void AddMember(Pokelol Name)
-    {
-        Members.Add(Name);
-    }
-
-    public void ShowTeam()
-    {
-        Console.WriteLine("Team Members:");
-        foreach (var member in Members)
-        {
-            Console.WriteLine($"Name: {member.Name}, HP: {member.Stats.Vie}, Attack: {member.Stats.Attaque}, Defense: {member.Stats.Defense}, Speed: {member.Stats.Vitesse}");
         }
     }
 }
