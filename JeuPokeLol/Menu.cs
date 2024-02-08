@@ -4,6 +4,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+#pragma warning disable CS8600 
+#pragma warning disable CA1050
 
 public static class MenuManager
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#pragma warning disable CA1050
 
 public class Pokelol
 {
@@ -41,10 +42,16 @@ public class Pokelol
         if (Experience_Acquis >= Experience_Necessaire)
         {
             Level++;
+            Experience_Acquis -= Experience_Necessaire;
             Experience_Necessaire *= 1.05f;
             Stats.Attaque += 5;
             Stats.Defense += 3;
             Stats.Vie += 15;
+            Console.WriteLine("Votre pokemon a passer un niveau");
+        }
+        else
+        {
+            Console.WriteLine("vous navez pas assez d'xp pour levelup");
         }
     }
 

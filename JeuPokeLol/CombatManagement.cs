@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-
-using System;
 using System.ComponentModel;
 using System.Numerics;
+#pragma warning disable CS8600 
+#pragma warning disable IDE0060
+#pragma warning disable CA1050
 
-public static class CombatManager
+public static class CombatManagement
 {
-    public static string CombatDresseur(Player player,Player ennemy, Pokelol joueur1, Pokelol joueur2, int index)
+    //FONCTION DE COMBAT CONTRE UN DRESSEUR
+    public static string CombatDresseur(Player player,Player ennemy, Pokelol joueur1, Pokelol joueur2, int index, int index_dresseur)
     {
         string vainqueur = "";
         Console.Clear();
@@ -20,7 +21,7 @@ public static class CombatManager
 
             while (joueur1.Stats.Vie > 0 && joueur2.Stats.Vie > 0 || FuiteReussie())
             {
-                if (player.position_x == 1 && player.position_y == 1)
+                if (player.Position_x == 1 && player.Position_y == 1)
                 {
                     Console.WriteLine("Vous avez réussi à fuir ! Combat terminé.");
                     vainqueur = "Ennemi";
@@ -33,6 +34,10 @@ public static class CombatManager
                 if (joueur2.Stats.Vie <= 0)
                 {
                     vainqueur = "Joueur";
+                    player.Team.Members[index].Experience_Acquis += 50;
+                    player.Team.Members[index].MonterDeNiveau();
+                    ennemy.Team.Members[index_dresseur].IsAlive = false;
+                    ChoixPokemon(player, ennemy);
                     break; 
                 }
                 if (joueur1.Stats.Vie <= 0)
@@ -51,7 +56,7 @@ public static class CombatManager
         {
             while (joueur1.Stats.Vie > 0 && joueur2.Stats.Vie > 0 || FuiteReussie())
             {
-                if (player.position_x == 1 && player.position_y == 1)
+                if (player.Position_x == 1 && player.Position_y == 1)
                 {
                     Console.WriteLine("Vous avez réussi à fuir ! Combat terminé.");
                     vainqueur = "Ennemi";
@@ -63,8 +68,11 @@ public static class CombatManager
                 TourJoueurDresseur(player, joueur1, joueur2, index);
                 if (joueur2.Stats.Vie <= 0)
                 {
-
                     vainqueur = "Joueur";
+                    player.Team.Members[index].Experience_Acquis += 50;
+                    player.Team.Members[index].MonterDeNiveau();
+                    ennemy.Team.Members[index_dresseur].IsAlive = false;
+                    ChoixPokemon(player, ennemy);
                     break;
                 }
                 if (joueur1.Stats.Vie <= 0)
@@ -82,6 +90,8 @@ public static class CombatManager
         Thread.Sleep(3000); // Pause pendant 5 secondes
         return vainqueur;
     }
+
+    //FONCTION DE COMBAT CONTRE UN POKEMON SAUVAGE
     public static string CombatPokemon(Player player, Player ennemy, Pokelol joueur1, Pokelol joueur2, int index, int index_pokelol)
     {
         string vainqueur = "";
@@ -89,9 +99,17 @@ public static class CombatManager
         if (joueur1.Stats.Vitesse > joueur2.Stats.Vitesse)
         {
 
-            while (joueur1.Stats.Vie > 0 && joueur2.Stats.Vie > 0 || FuiteReussie())
+            while (joueur1.Stats.Vie > 0 && joueur2.Stats.Vie > 0)
             {
-                if (player.position_x == 1 && player.position_y == 1)
+                if (player.Capture)
+                {
+                    vainqueur = "";
+                    player.Capture = false;
+                    Thread.Sleep(3000); // Pause pendant 3 secondes
+                    return vainqueur;
+                }
+
+                if (player.Position_x == 1 && player.Position_y == 1)
                 {
                     Console.WriteLine("Vous avez réussi à fuir ! Combat terminé.");
                     vainqueur = "Ennemi";
@@ -99,11 +117,29 @@ public static class CombatManager
                     Thread.Sleep(3000); // Pause pendant 5 secondes
                     return vainqueur;
                 }
-                TourJoueurPokemon(player, ennemy, joueur1, joueur2, index, index_pokelol);
+                TourJoueurPokemon(player, ennemy, joueur1, joueur2,index_pokelol);
                 TourEnnemi(player, joueur1, joueur2);
                 if (joueur2.Stats.Vie <= 0)
                 {
                     vainqueur = "Joueur";
+                    player.Team.Members[index].Experience_Acquis += 50;
+                    player.Team.Members[index].MonterDeNiveau();
+                    if (joueur2.Name == "Pikaren")
+                    {
+                        joueur2.DefinirStatistiques(233, 183, 147, 151);
+                    }
+                    if (joueur2.Name == "Ectoplari")
+                    {
+                        joueur2.DefinirStatistiques(213, 162, 142, 182);
+                    }
+                    if (joueur2.Name == "Swainquaza")
+                    {
+                        joueur2.DefinirStatistiques(212, 202, 142, 147);
+                    }
+                    if (joueur2.Name == "Ahram")
+                    {
+                        joueur2.DefinirStatistiques(207, 137, 152, 187);
+                    }
                     break;
                 }
                 if (joueur1.Stats.Vie <= 0)
@@ -120,9 +156,17 @@ public static class CombatManager
         }
         else
         {
-            while (joueur1.Stats.Vie > 0 && joueur2.Stats.Vie > 0 || FuiteReussie())
+            while (joueur1.Stats.Vie > 0 && joueur2.Stats.Vie > 0)
             {
-                if (player.position_x == 1 && player.position_y == 1)
+                if (player.Capture)
+                {
+                    vainqueur = "";
+                    player.Capture = false;
+                    Thread.Sleep(3000); // Pause pendant 3 secondes
+                    return vainqueur;
+                }
+
+                if (player.Position_x == 1 && player.Position_y == 1)
                 {
                     Console.WriteLine("Vous avez réussi à fuir ! Combat terminé.");
                     vainqueur = "Ennemi";
@@ -130,12 +174,30 @@ public static class CombatManager
                     Thread.Sleep(3000); // Pause pendant 5 secondes
                     return vainqueur;
                 }
+
                 TourEnnemi(player, joueur1, joueur2);
-                TourJoueurPokemon(player, ennemy, joueur1, joueur2, index, index_pokelol);
+                TourJoueurPokemon(player, ennemy, joueur1, joueur2,index_pokelol);
                 if (joueur2.Stats.Vie <= 0)
                 {
-
                     vainqueur = "Joueur";
+                    player.Team.Members[index].Experience_Acquis += 50;
+                    player.Team.Members[index].MonterDeNiveau();
+                    if (joueur2.Name == "Pikaren")
+                    {
+                        joueur2.DefinirStatistiques(233, 183, 147, 151);
+                    }
+                    if (joueur2.Name == "Ectoplari")
+                    {
+                        joueur2.DefinirStatistiques(213, 162, 142, 182);
+                    }
+                    if (joueur2.Name == "Swainquaza")
+                    {
+                        joueur2.DefinirStatistiques(212, 202, 142, 147);
+                    }
+                    if (joueur2.Name == "Ahram")
+                    {
+                        joueur2.DefinirStatistiques(207, 137, 152, 187);
+                    }
                     break;
                 }
                 if (joueur1.Stats.Vie <= 0)
@@ -150,17 +212,12 @@ public static class CombatManager
 
 
         Console.WriteLine($"Le vainqueur est : {vainqueur}");
-        Thread.Sleep(3000); // Pause pendant 5 secondes
+        Thread.Sleep(3000); // Pause pendant 3 secondes
         return vainqueur;
     }
 
-    private static bool FuiteReussie()
-    {
-        // Implémentez la logique pour déterminer si la fuite est réussie
-        Random random = new Random();
-        return random.Next(0, 2) == 0; // Exemple simple : 50% de chance de réussir à fuir
-    }
-
+    
+    //CHOIX DU POKEMON JOUEUR ET DEFINTION DU PREMIER POKEMON DRESSEUR/POKEMON SAUVAGE
     public static void ChoixPokemon(Player player, Player ennemy)
     {
         player.Team.ShowTeam();
@@ -168,19 +225,14 @@ public static class CombatManager
         string choix_equipe = Console.ReadLine();
         int result = Convert.ToInt32(choix_equipe) - 1;
 
-        Random rand_dresseur = new Random();
+        Random rand_dresseur = new();
         int random_dresseur = rand_dresseur.Next(0, 3);
-        CombatManager.CombatDresseur(player,ennemy, player.Team.Members[result], ennemy.Team.Members[random_dresseur], result);
+        CombatManagement.CombatDresseur(player,ennemy, player.Team.Members[result], ennemy.Team.Members[random_dresseur], result, random_dresseur);
     }
 
-    private static bool Capture()
-    {
-        // Implémentez la logique pour déterminer si la fuite est réussie
-        Random random = new Random();
-        return random.Next(0, 3) == 0; // Exemple simple : 30% de chance de réussir à fuir
-    }
-
-    private static void TourJoueurPokemon(Player player, Player ennemy, Pokelol joueur1, Pokelol joueur2, int index, int index_pokelol)
+    
+    //TOUR DU JOUEUR CONTRE UN POKEMON
+    private static void TourJoueurPokemon(Player player, Player ennemy, Pokelol joueur1, Pokelol joueur2,int index_pokelol)
     {
         Console.WriteLine();
         Console.WriteLine("C'est à vous, que souhaitez-vous faire ?");
@@ -200,13 +252,15 @@ public static class CombatManager
                 Console.Clear();
                 Console.WriteLine("TOUR DU JOUEUR");
                 AppliquerEffetCapacite(joueur1, joueur2, res);
-                afficher_stats(joueur1, joueur2);
+                Afficher_stats(joueur1, joueur2);
                 break;
             case "2":
                 Console.Clear();
                 Console.WriteLine("Selectionner l'objet à utilisé");
                 player.Inventory.ShowInventory();
+
                 string itemchoix = Console.ReadLine();
+
                 switch (itemchoix)
                 {
                     case "1":
@@ -215,15 +269,16 @@ public static class CombatManager
                         Console.WriteLine("Vous lancez une pokéball !!");
                         if (Capture())  
                         {
-                            Console.WriteLine("Vous avez réussi à fuir ! Combat terminé.");
+                            Console.WriteLine($"{joueur2.Name} a été attrapé !!");
+                            Console.WriteLine($"{joueur2.Name} a rejoint votre équipe");
                             player.Team.AddMember(ennemy.Team.Members[index_pokelol]);
-                            Thread.Sleep(3000); // Pause pendant 5 secondes
-                            return;
+                            Thread.Sleep(1500); // Pause pendant 1.5 secondes
+                            player.Capture = true;
                         }
 
                         else
                         {
-
+                            Console.WriteLine($"{joueur2.Name} est sortie de la pokéball");
                         }
                         break;
                 }
@@ -232,8 +287,8 @@ public static class CombatManager
             case "3":
                 if (FuiteReussie())
                 {
-                    player.position_x = 1;
-                    player.position_y = 1;
+                    player.Position_x = 1;
+                    player.Position_y = 1;
                 }
                 else
                 {
@@ -244,6 +299,7 @@ public static class CombatManager
         }
     }
 
+    //TOUR DU JOUEUR CONTRE UN DRESSEUR
     private static void TourJoueurDresseur(Player player, Pokelol joueur1, Pokelol joueur2, int index)
     {
         Console.WriteLine();
@@ -264,7 +320,7 @@ public static class CombatManager
                 Console.Clear();
                 Console.WriteLine("TOUR DU JOUEUR");
                 AppliquerEffetCapacite(joueur1, joueur2, res);
-                afficher_stats(joueur1, joueur2);
+                Afficher_stats(joueur1, joueur2);
                 break;
             case "2":
                 Console.Clear();
@@ -283,8 +339,8 @@ public static class CombatManager
             case "3":
                 if (FuiteReussie())
                 {
-                    player.position_x = 1;
-                    player.position_y = 1;
+                    player.Position_x = 1;
+                    player.Position_y = 1;
                 }
                 else
                 {
@@ -295,40 +351,24 @@ public static class CombatManager
         }
     }
 
+    //IA DE L'ENNEMI
     private static void TourEnnemi(Player player, Pokelol joueur1, Pokelol joueur2)
     {
         Console.WriteLine("TOUR DE L'ENNEMI");
-        Random random = new Random();
+        Random random = new();
         int randomAbility = random.Next(0, 2);
         AppliquerEffetCapacite(joueur2, joueur1, randomAbility);
-        afficher_stats(joueur1, joueur2);
+        Afficher_stats(joueur1, joueur2);
     }
 
-
-    private static float calcul_degat(Pokelol Attanquant, Pokelol Defenseur, int i)
-    {
-
-        Random random = new Random();
-        // Générer un nombre aléatoire entre 0 et 99 inclus
-        int randomValue = random.Next(0, 100);
-        float coup_critique = 1.0f;
-
-        if (randomValue <= 33)
-        {
-            coup_critique = 1.5f;
-        }
-
-        float pv_perdu = (((Attanquant.Stats.Attaque * Attanquant.Capacites[i].Stats_capacite) / (Defenseur.Stats.Defense * 50 + 2)) * coup_critique);
-        return pv_perdu;
-    }
-
+    //FONCTION PERMETTANT DE GERER LES CHANGEMENTS DE STATS
     private static void AppliquerEffetCapacite(Pokelol Attaquant, Pokelol Defenseur, int res)
     {
         switch (Attaquant.Capacites[res].Type_capacite)
         {
             case "Degat":
-                Defenseur.Stats.Vie -= calcul_degat(Attaquant, Defenseur, res);
-                Console.WriteLine(Defenseur.Name + " perd " + calcul_degat(Attaquant, Defenseur, res) + "point de vie");
+                Defenseur.Stats.Vie -= Calcul_degat(Attaquant, Defenseur, res);
+                Console.WriteLine(Defenseur.Name + " perd " + Calcul_degat(Attaquant, Defenseur, res) + "point de vie");
                 Console.WriteLine();
                 break;
             case "Attaque-":
@@ -357,12 +397,50 @@ public static class CombatManager
         }
     }
 
-    private static void afficher_stats(Pokelol Joueur, Pokelol Ennemi)
+    //FONCTION AFFICHAGE DE STATS
+    private static void Afficher_stats(Pokelol Joueur, Pokelol Ennemi)
     {
         Console.WriteLine(Joueur.Name + " Vie: " + Joueur.Stats.Vie + " || Attaque: " + Joueur.Stats.Attaque + " || Defense: " + Joueur.Stats.Defense + " || Speed: " + Joueur.Stats.Vitesse + "\n");
 
         Console.WriteLine(Ennemi.Name + " Vie: " + Ennemi.Stats.Vie + " || Attaque: " + Ennemi.Stats.Attaque + " || Defense: " + Ennemi.Stats.Defense + " || Speed: " + Ennemi.Stats.Vitesse + "\n");
     }
+
+
+    //FONCTION DE CALCUL DES DEGATS
+    private static float Calcul_degat(Pokelol Attanquant, Pokelol Defenseur, int i)
+    {
+
+        Random random = new();
+        int randomValue = random.Next(0, 100);
+        float coup_critique = 1.0f;
+
+        if (randomValue <= 33)
+        {
+            Console.WriteLine("Coup critique");
+            coup_critique = 1.5f;
+        }
+
+        float pv_perdu = (((Attanquant.Stats.Attaque * Attanquant.Capacites[i].Stats_capacite) / (Defenseur.Stats.Defense * 8 + 2)) * coup_critique);
+        return pv_perdu;
+    }
+
+
+    //CREATION DE LA FONCTION DE CAPTURE 
+    private static bool Capture()
+    {
+        Random random = new();
+        return random.Next(0, 3) == 0; //30% DE CHANCE DE CAPTURE
+        
+    }
+
+
+    //CREATION DE LA FONCTION FUITE
+    private static bool FuiteReussie()
+    {
+        Random random = new();
+        return random.Next(0, 1) == 0; //100% DE CHANCE DE FUITE
+    }
+        
 }
 
 

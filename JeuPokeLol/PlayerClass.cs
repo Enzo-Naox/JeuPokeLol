@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#pragma warning disable CA1050
 
 public class Player
 {
     public string Name { get; set; }
-    public int position_x { get; set; }
-    public int position_y { get; set; }
-    public int Level { get; set; }
-    public float Experience_Acquis { get; set; }
-    public float Experience_Necessaire { get; set; }
 
+    public int Position_x { get; set; }
+    public int Position_y { get; set; }
+
+    public bool Capture { get; set; }
+    
     public Inventory Inventory { get; set; }
     public Team Team { get; set; }
 
@@ -21,15 +22,13 @@ public class Player
     {
         Name = name;
 
-        position_x = 1;
-        position_y = 1;
-        Level = 1;
-        Experience_Acquis = 0;
-        Experience_Necessaire = 100;
+        Position_x = 1;
+        Position_y = 1;
 
+        Capture = false;
+        
         Inventory = new Inventory();
         Team = new Team();
     }
-
 
 }

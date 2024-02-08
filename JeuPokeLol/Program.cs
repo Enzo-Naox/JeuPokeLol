@@ -13,12 +13,14 @@ class Programme
     static void Main()
     {
         //CREATION D'UN NOUVEAU JOUEUR
-        Player player = new Player("Player");
-        Player ennemy = new Player("Ennemy");
-        Player pokelol = new Player("Pokelol");
+        Player player = new("Player");
+        Player ennemy = new("Ennemy");
+        Player pokelol = new("Pokelol");
 
 
         //DEFINITION DES POKELOL ET DE LEURS STATISTIQUES
+        Pokelol Test = new("Test");
+        Test.DefinirStatistiques(100000, 100000, 100000, 100000);
         Pokelol Pikaren = new("Pikaren");
         Pikaren.DefinirStatistiques(233, 183, 147, 151);
         Pokelol Ectoplari = new("Ectoplari");
@@ -27,6 +29,11 @@ class Programme
         Swainquaza.DefinirStatistiques(212, 202, 142, 147);
         Pokelol Ahram = new("Ahram");
         Ahram.DefinirStatistiques(207, 137, 152, 187);
+
+
+        Pokelol.Capacite Test_capacite1 = new("Test1 = ", "Inflige des degats(150 puissance)", 200, "Degat");
+        Pokelol.Capacite Test_capacite2 = new("Test2 = ", "Inflige des degats(110 puissance)", 200, "Degat");
+        Pokelol.Capacite Test_capacite3 = new("Tets3 = ", "Inflige des degats(90 puissance)", 200, "Degat");
 
         //CAPACITE DE PIKAREN
         Pokelol.Capacite Pikaren_capacite1 = new("Elekdemacia = ", " Inflige des degats (80 puissance)", 80, "Degat");
@@ -52,6 +59,10 @@ class Programme
         Pikaren.AddCapacite(Pikaren_capacite2);
         Pikaren.AddCapacite(Pikaren_capacite3);
 
+        Test.AddCapacite(Test_capacite1);
+        Test.AddCapacite(Test_capacite2);
+        Test.AddCapacite(Test_capacite3);
+
         Ectoplari.AddCapacite(Ectoplari_capacite1);
         Ectoplari.AddCapacite(Ectoplari_capacite2);
         Ectoplari.AddCapacite(Ectoplari_capacite3);
@@ -64,6 +75,7 @@ class Programme
         Ahram.AddCapacite(Ahram_capacite2);
         Ahram.AddCapacite(Ahram_capacite3);
 
+        player.Team.AddMember(Test);
         player.Team.AddMember(Pikaren);
         
 
@@ -77,8 +89,8 @@ class Programme
         pokelol.Team.AddMember(Ectoplari);
         pokelol.Team.AddMember(Ahram);
 
-        Item item1 = new Item { Name = "Healing Potion" };
-        Item item2 = new Item { Name = "Pokeball" };
+        Item item1 = new("Healing Potion");
+        Item item2 = new("Pokeball");
 
         player.Inventory.AddItem(item1);
         player.Inventory.AddItem(item2);
@@ -88,7 +100,7 @@ class Programme
         MapManagement.GenerateMap(15, 15);
         do
         {
-
+            
             Console.Clear();
             MapManagement.DrawMap(player);
             keyInfo = Console.ReadKey();
